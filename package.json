@@ -4,8 +4,21 @@
   "description": "A developers' social network (static linkedin kind)",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "server": "nodemon server.js"
   },
   "author": "Ashish Paudel",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "2.4.3",
+    "express": "4.17.0",
+    "jsonwebtoken": "8.5.1",
+    "mongoose": "5.5.10",
+    "passport": "0.4.0",
+    "passport-jwt": "4.0.0",
+    "validator": "11.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "1.19.0"
+  }
 }
