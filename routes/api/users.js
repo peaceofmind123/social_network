@@ -8,6 +8,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const secretKey = require("../../config/keys").secretKey;
 const passport = require("passport");
+const registrationValidator = require("../../validation/register");
+
 // @route GET api/users/test
 // @desc  a test route
 // @access PUBLIC
@@ -16,41 +18,42 @@ router.get("/test", (req, res) => res.json({ msg: "users route works" }));
 // @route POST api/users/register
 // @desc  register a new user
 // @access PUBLIC
-router.post("/register", (req, res) => {
-  (async () => {
-    // just made async to use await
-
-    try {
-      // check if email is already registered
-      const oldUser = await User.findOne({ email: req.body.email });
-      if (oldUser) {
-        return res.status(400).json({ email: "Email is already registered" });
-      }
-
-      // if email is not registered yet
-      const avatar = gravatar.url(req.body.email, {
-        s: "200", // size
-        r: "r", // rating
-        d: "mm" // default case: mm stands for return placeholder image
-      });
-
-      let newUser = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password,
-        avatar
-      });
-
-      // hash the password
-      const salt = await bcrypt.genSalt(10);
-      const hash = await bcrypt.hash(req.body.password, salt);
-      newUser.password = hash;
-      const savedUser = await newUser.save();
-      res.json(savedUser);
-    } catch (err) {
-      console.log(err);
+router.post("/register", async (req, res) => {
+  const { errors, isValid } = registrationValidator(req.body);
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+  try {
+    // check if email is already registered
+    const oldUser = await User.findOne({ email: req.body.email });
+    if (oldUser) {
+      errors.email = "Email is already registered";
+      return res.status(400).json(errors);
     }
-  })();
+
+    // if email is not registered yet
+    const avatar = gravatar.url(req.body.email, {
+      s: "200", // size
+      r: "r", // rating
+      d: "mm" // default case: mm stands for return placeholder image
+    });
+
+    let newUser = new User({
+      name: req.body.name,
+      email: req.body.email,
+      password: req.body.password,
+      avatar
+    });
+
+    // hash the password
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(req.body.password, salt);
+    newUser.password = hash;
+    const savedUser = await newUser.save();
+    res.json(savedUser);
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 // @route POST api/users/login
