@@ -9,6 +9,7 @@ const jwt = require("jsonwebtoken");
 const secretKey = require("../../config/keys").secretKey;
 const passport = require("passport");
 const registrationValidator = require("../../validation/register");
+const loginValidator = require("../../validation/login");
 
 // @route GET api/users/test
 // @desc  a test route
@@ -60,6 +61,12 @@ router.post("/register", async (req, res) => {
 // @desc  login a user / generate a JWT
 // @access PUBLIC
 router.post("/login", async (req, res) => {
+  // Initial Validation
+  const { errors, isValid } = loginValidator(req.body);
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
   const email = req.body.email;
   const password = req.body.password;
 
@@ -67,14 +74,16 @@ router.post("/login", async (req, res) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    return res.status(404).json({ email: "User not found" });
+    errors.email = "User not found";
+    return res.status(404).json(errors);
   }
 
   // verify the password
   const isMatch = await bcrypt.compare(password, user.password);
 
   if (!isMatch) {
-    return res.status(400).json({ password: "Password is incorrect" });
+    errors.password = "Password is incorrect";
+    return res.status(400).json(errors);
   }
 
   // create payload

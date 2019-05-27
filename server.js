@@ -28,6 +28,11 @@ app.use(passport.initialize());
 // passport config
 require("./config/passport")(passport);
 
+// disable caching of responses
+app.use((req, res, next) => {
+  res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
+  next();
+});
 //routes
 app.use("/api/users", userRouter);
 app.use("/api/posts", postRouter);
