@@ -7,6 +7,7 @@ let errors = {};
 
 module.exports = data => {
   // converting to string so that validator function param type matches
+  // this is done for required fields as they need to be verified to be not empty
   const name = !isEmpty(data.name) ? data.name : "";
   const email = !isEmpty(data.email) ? data.email : "";
   const password = !isEmpty(data.password) ? data.password : "";
