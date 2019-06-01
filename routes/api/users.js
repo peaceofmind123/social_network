@@ -3,6 +3,7 @@
 const router = require("express").Router();
 const mongoose = require("mongoose");
 const User = require("../../models/User");
+const Profile = require("../../models/Profile");
 const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -106,4 +107,29 @@ router.get(
   }
 );
 
+// @route DELETE api/users
+// @desc  Delete currently logged in user and his/her profile
+// @access PRIVATE
+router.delete(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      if (profile) {
+        profile
+          .remove()
+          .then(() => {
+            User.findOneAndRemove({ _id: req.user.id })
+              .then(() => res.json({ success: true }))
+              .catch(err => res.status(404).json({ success: false }));
+          })
+          .catch(() => res.status(404).json({ success: false }));
+      } else {
+        User.findOneAndRemove({ _id: req.user.id })
+          .then(() => res.json({ success: true }))
+          .catch(() => res.status(404).json({ success: false }));
+      }
+    });
+  }
+);
 module.exports = router;

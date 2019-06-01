@@ -339,4 +339,21 @@ router.delete(
       .catch(err => res.status(400).json(err));
   }
 );
+
+// @route DELETE api/profile
+// @desc  Delete the user's profile
+// @access PRIVATE
+router.delete(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    console.log(req.user);
+    Profile.findOneAndDelete({ user: req.user.id })
+      .then(() => {
+        res.json({ success: true });
+      })
+      .catch(() => res.status(404).json({ success: false }));
+  }
+);
+
 module.exports = router;
