@@ -85,4 +85,64 @@ router.delete(
       );
   }
 );
+
+// @route POST api/posts/like:id
+// @desc  Like the post given by id
+// @access PRIVATE
+router.post(
+  "/like/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Post.findById(req.params.id)
+      .then(post => {
+        // Check if the user already liked the post
+        if (
+          post.likes.filter(like => like.user.toString() === req.user.id)
+            .length > 0
+        ) {
+          return res
+            .status(400)
+            .json({ alreadyliked: "The user already liked this post" });
+        }
+
+        post.likes.unshift({ user: req.user.id });
+        post.save().then(post => res.json(post));
+      })
+      .catch(() => res.status(404).json({ nopost: "the post does not exist" }));
+  }
+);
+
+// @route POST api/posts/unlike:id
+// @desc  Unlike the post given by id
+// @access PRIVATE
+router.post(
+  "/unlike/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Post.findById(req.params.id)
+      .then(post => {
+        // Check if the user has liked the post
+        if (
+          post.likes.filter(like => like.user.toString() === req.user.id)
+            .length === 0
+        ) {
+          // he/she has not liked it yet
+          return res
+            .status(400)
+            .json({ notliked: "The user has not liked this post" });
+        }
+
+        const removeIndex = post.likes
+          .map(like => like.user.toString())
+          .indexOf(req.user.id);
+
+        if (removeIndex >= 0) {
+          post.likes.splice(removeIndex, 1);
+          post.save().then(post => res.json(post));
+        }
+      })
+      .catch(() => res.status(404).json({ nopost: "the post does not exist" }));
+  }
+);
+
 module.exports = router;
