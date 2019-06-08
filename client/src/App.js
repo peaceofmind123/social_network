@@ -1,13 +1,14 @@
 import React from "react";
 import "./App.css";
-
+import Navbar from "./components/layouts/Navbar";
+import Landing from "./components/layouts/Landing";
+import Footer from "./components/layouts/Footer";
 function App() {
   return (
     <div className="App">
-      <h1 className="heading">
-        My React App<hr />
-        <i class="fas fa-truck-monster fa-xs" />
-      </h1>
+      <Navbar />
+      <Landing />
+      <Footer />
     </div>
   );
 }
