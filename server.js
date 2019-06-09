@@ -6,8 +6,13 @@ const userRouter = require("./routes/api/users");
 const profileRouter = require("./routes/api/profile");
 const postRouter = require("./routes/api/posts");
 
+// cors: dev only
+const cors = require("cors");
+
 const app = express();
 
+//cors: dev only: MUST REMOVE IN PRODUCTION
+app.use(cors());
 //Database Config
 const db = require("./config/keys").mongoURI;
 
