@@ -23,7 +23,11 @@ class Login extends Component {
     this.props.loginUser(user);
   };
 
+  // triggered when the component first recieves props or its props are updated by redux
   componentWillReceiveProps(newProps) {
+    if (newProps.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
+    }
     if (newProps.errors) {
       this.setState({ errors: newProps.errors });
     }

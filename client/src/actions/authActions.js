@@ -20,21 +20,24 @@ export const loginUser = userData => dispatch => {
   axios
     .post("http://localhost:5000/api/users/login", userData)
     .then(res => {
-      const token = res.data;
-      console.log(res);
+      const { token } = res.data;
       // save the token to localstorage
       localStorage.setItem("jwtToken", token);
 
       // set Authorization header
       setAuthHeader(token);
+
       // decode user from token
       const user = jwtDecode(token);
       // call another action ot set current user
-      dispatch(setCurrentUser(user));
+      return dispatch(setCurrentUser(user));
     })
     .catch(err => {
-      console.log(err.response.data);
-      dispatch({ type: GET_ERRORS, payload: err.response.data });
+      console.log(err);
+      return dispatch({
+        type: GET_ERRORS,
+        payload: err.response ? err.response.data : {}
+      });
     });
 };
 

@@ -6,7 +6,7 @@ import isEmpty from "../validation/is-empty";
 
 // the initial auth state: essentially all the vars sufficient for any authorization activities
 const initialAuthState = {
-  isAuthorized: false,
+  isAuthenticated: false,
   user: {} // initially, no user has logged in
 };
 
