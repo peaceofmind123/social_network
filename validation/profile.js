@@ -3,9 +3,8 @@ const isEmpty = require("./is-empty");
 
 // Validation logic for register route
 
-let errors = {};
-
 module.exports = data => {
+  const errors = {};
   // converting to string so that validator function param type matches
   //required fields
   const handle = !isEmpty(data.handle) ? data.handle : "";

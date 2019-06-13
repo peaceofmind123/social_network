@@ -1,7 +1,10 @@
 import React, { Component } from "react";
-import axios from "axios";
 import classnames from "classnames";
-export default class Login extends Component {
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import PropTypes from "prop-types";
+import { loginUser } from "../../actions/authActions";
+class Login extends Component {
   state = {
     email: "",
     password: "",
@@ -17,11 +20,14 @@ export default class Login extends Component {
     const { email, password } = this.state;
     const user = { email, password };
 
-    axios
-      .post("http://localhost:5000/api/users/login", user)
-      .then(res => console.log(res.data))
-      .catch(err => this.setState({ errors: err.response.data }));
+    this.props.loginUser(user);
   };
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.errors) {
+      this.setState({ errors: newProps.errors });
+    }
+  }
   render() {
     const { email, password, errors } = this.state;
     return (
@@ -73,3 +79,14 @@ export default class Login extends Component {
     );
   }
 }
+Login.propTypes = {
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
+  loginUser: PropTypes.func.isRequired
+};
+const mapStateToProps = state => ({ auth: state.auth, errors: state.errors });
+
+export default connect(
+  mapStateToProps,
+  { loginUser }
+)(withRouter(Login));

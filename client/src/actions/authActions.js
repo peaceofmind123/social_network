@@ -1,5 +1,7 @@
-import { GET_ERRORS } from "./types";
+import { GET_ERRORS, SET_CURRENT_USER } from "./types";
 import axios from "axios";
+import jwtDecode from "jwt-decode";
+import setAuthHeader from "../utils/setAuthHeader";
 // Contains actions that define the data required by the reducer to update state
 // These just return constant objects which at least have a type and tell the reducer what to do
 // The doing part is done by the reducer itself, not here
@@ -12,3 +14,32 @@ export const registerUser = (userData, history) => dispatch => {
     .catch(err => dispatch({ type: GET_ERRORS, payload: err.response.data }));
   // when we get an error, we dispatch the GET_ERRORS action type to the reducer which then modifies the state
 };
+
+// Login User
+export const loginUser = userData => dispatch => {
+  axios
+    .post("http://localhost:5000/api/users/login", userData)
+    .then(res => {
+      const token = res.data;
+      console.log(res);
+      // save the token to localstorage
+      localStorage.setItem("jwtToken", token);
+
+      // set Authorization header
+      setAuthHeader(token);
+      // decode user from token
+      const user = jwtDecode(token);
+      // call another action ot set current user
+      dispatch(setCurrentUser(user));
+    })
+    .catch(err => {
+      console.log(err.response.data);
+      dispatch({ type: GET_ERRORS, payload: err.response.data });
+    });
+};
+
+// Set current User
+export const setCurrentUser = user => ({
+  type: SET_CURRENT_USER,
+  payload: user
+});

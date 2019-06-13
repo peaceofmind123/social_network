@@ -3,9 +3,8 @@ const isEmpty = require("./is-empty");
 
 // Validation logic for register route
 
-let errors = {};
-
 module.exports = data => {
+  const errors = {};
   // converting to string so that validator function param type matches
   // this is done for required fields as they need to be verified to be not empty
   const school = !isEmpty(data.school) ? data.school : "";

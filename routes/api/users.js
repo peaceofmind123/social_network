@@ -65,6 +65,7 @@ router.post("/login", async (req, res) => {
   // Initial Validation
 
   const { errors, isValid } = loginValidator(req.body);
+
   if (!isValid) {
     return res.status(400).json(errors);
   }
