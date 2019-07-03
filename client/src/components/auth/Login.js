@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { loginUser } from "../../actions/authActions";
+
 class Login extends Component {
   state = {
     email: "",
@@ -23,15 +24,12 @@ class Login extends Component {
     this.props.loginUser(user);
   };
 
-  // triggered when the component first recieves props or its props are updated by redux
-  componentWillReceiveProps(newProps) {
-    if (newProps.auth.isAuthenticated) {
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
       this.props.history.push("/dashboard");
     }
-    if (newProps.errors) {
-      this.setState({ errors: newProps.errors });
-    }
   }
+
   render() {
     const { email, password, errors } = this.state;
     return (

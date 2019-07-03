@@ -2,6 +2,7 @@ import { GET_ERRORS, SET_CURRENT_USER } from "./types";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 import setAuthHeader from "../utils/setAuthHeader";
+
 // Contains actions that define the data required by the reducer to update state
 // These just return constant objects which at least have a type and tell the reducer what to do
 // The doing part is done by the reducer itself, not here
@@ -46,3 +47,16 @@ export const setCurrentUser = user => ({
   type: SET_CURRENT_USER,
   payload: user
 });
+
+export const logoutUser = () => dispatch => {
+  // remove token from localstorage
+  localStorage.removeItem("jwtToken");
+
+  // remove the auth header
+  setAuthHeader(false);
+  // dispatch another action to set current user on the global state to null
+  dispatch({
+    type: SET_CURRENT_USER,
+    payload: {}
+  });
+};

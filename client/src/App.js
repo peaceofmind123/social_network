@@ -9,7 +9,21 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import store from "./store";
 import { Provider } from "react-redux";
+import setAuthHeader from "./utils/setAuthHeader";
+import jwt_decode from "jwt-decode";
+import { setCurrentUser, logoutUser } from "./actions/authActions";
+// this is required so that a page refresh reinstates the state back to the one before the refresh
+if (localStorage.jwtToken) {
+  setAuthHeader(localStorage.jwtToken);
+  const user = jwt_decode(localStorage.jwtToken);
+  store.dispatch(setCurrentUser(user));
 
+  // check if token has expired
+  if (localStorage.jwtToken.exp < Date.now() / 1000) {
+    store.dispatch(logoutUser());
+    window.location.href = "/login";
+  }
+}
 function App() {
   return (
     <Provider store={store}>

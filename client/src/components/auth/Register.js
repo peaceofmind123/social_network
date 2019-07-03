@@ -38,6 +38,12 @@ class Register extends Component {
     // dynamically recieve the errors props upon getting errors
     if (newProps.errors) this.setState({ errors: newProps.errors });
   }
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      // no need to render this view for authenticated user
+      this.props.history.push("/dashboard");
+    }
+  }
   render() {
     const { name, email, password, password2, errors } = this.state;
 
