@@ -21,8 +21,7 @@ class Navbar extends Component {
           <span>
             <img
               style={{
-                width: "1rem",
-                height: "1rem",
+                width: "2rem",
                 marginRight: "10px",
                 display: "inline"
               }}

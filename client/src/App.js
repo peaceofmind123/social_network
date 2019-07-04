@@ -26,7 +26,7 @@ if (localStorage.jwtToken) {
   store.dispatch(setCurrentUser(user));
 
   // check if token has expired
-  if (localStorage.jwtToken.exp < Date.now() / 1000) {
+  if (user.exp < Date.now() / 1000) {
     store.dispatch(clearCurrentProfile());
     store.dispatch(logoutUser());
     window.location.href = "/login";

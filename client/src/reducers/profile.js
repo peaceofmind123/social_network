@@ -14,6 +14,9 @@ export default function(state = initialState, action) {
       return { ...state, profile: action.payload, loading: false };
     case actionTypes.CLEAR_CURRENT_PROFILE:
       return { ...state, profile: null };
+
+    case actionTypes.ADD_PROFILE:
+      return { ...state, profile: action.payload };
     default:
       return state;
   }

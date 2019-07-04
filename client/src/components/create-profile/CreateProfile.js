@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 
 import TextAreaGroup from "../common/TextAreaGroup";
 import TextFieldGroup from "../common/TextFieldGroup";
 import SelectGroup from "../common/SelectGroup";
 import SocialInputGroup from "../common/SocialInputGroup";
+
+import { addProfile } from "../../actions/profileActions";
 class CreateProfile extends Component {
   state = {
     displaySocialInputs: false,
@@ -26,11 +29,48 @@ class CreateProfile extends Component {
   };
   onSubmit = e => {
     e.preventDefault();
-    console.log("form submitted");
+    const {
+      handle,
+      company,
+      website,
+      location,
+      status,
+      skills,
+      githubusername,
+      bio,
+      twitter,
+      facebook,
+      linkedin,
+      youtube,
+      instagram
+    } = this.state;
+
+    const profileData = {
+      handle,
+      company,
+      website,
+      location,
+      status,
+      skills,
+      githubusername,
+      bio,
+      twitter,
+      facebook,
+      linkedin,
+      youtube,
+      instagram
+    };
+    this.props.addProfile(profileData, this.props.history);
   };
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.errors) {
+      this.setState({ ...this.state, errors: newProps.errors });
+    }
+  }
   render() {
     const { errors, displaySocialInputs } = this.state;
 
@@ -102,6 +142,7 @@ class CreateProfile extends Component {
                 <TextFieldGroup
                   placeholder="* Profile Handle"
                   name="handle"
+                  value={this.state.handle}
                   onChange={this.onChange}
                   error={errors.handle}
                   info="A unique handle for your profile URL. Your full name, company name, nickname, etc."
@@ -165,6 +206,7 @@ class CreateProfile extends Component {
                 />
                 <div className="mb-3">
                   <button
+                    type="button"
                     onClick={() => {
                       this.setState(prevState => ({
                         ...prevState,
@@ -182,6 +224,11 @@ class CreateProfile extends Component {
                   </span>
                   <div style={{ marginTop: "1rem" }}>{socialLinks}</div>
                 </div>
+                <input
+                  type="submit"
+                  value="Submit"
+                  className="btn btn-primary"
+                />
               </form>
             </div>
           </div>
@@ -193,11 +240,15 @@ class CreateProfile extends Component {
 
 CreateProfile.propTypes = {
   profile: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired
+  errors: PropTypes.object.isRequired,
+  addProfile: PropTypes.func.isRequired
 };
 const mapStateToProps = state => ({
   profile: state.profile,
   errors: state.errors
 });
 
-export default connect(mapStateToProps)(CreateProfile);
+export default connect(
+  mapStateToProps,
+  { addProfile }
+)(withRouter(CreateProfile));

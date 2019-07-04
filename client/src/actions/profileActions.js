@@ -31,3 +31,33 @@ export const profileLoading = () => ({
 export const clearCurrentProfile = () => ({
   type: actionTypes.CLEAR_CURRENT_PROFILE
 });
+
+// add a new profile
+
+export const addProfile = (profileData, history) => dispatch => {
+  axios
+    .post("http://localhost:5000/api/profile", profileData)
+    .then(res => history.push("/dashboard"))
+    .catch(err =>
+      dispatch({ type: actionTypes.GET_ERRORS, payload: err.response.data })
+    );
+};
+
+// delete the entire user account
+export const deleteAccount = () => dispatch => {
+  if (!window.confirm("This cannot be undone. Are you sure?")) return;
+  axios
+    .delete("http://localhost:5000/api/users")
+    .then(res =>
+      dispatch({
+        type: actionTypes.SET_CURRENT_USER,
+        payload: {} //this will log the user out
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: actionTypes.GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};

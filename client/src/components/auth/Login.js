@@ -30,6 +30,9 @@ class Login extends Component {
     }
   }
   componentWillReceiveProps(newProps) {
+    if (newProps.errors) {
+      this.setState({ ...this.state, errors: newProps.errors });
+    }
     if (newProps.auth.isAuthenticated) {
       this.props.history.push("/dashboard");
     }

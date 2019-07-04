@@ -3,7 +3,7 @@
 
 import { Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import React, { Component } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 function PrivateRoute({ component: Component, auth, ...rest }) {
   // the component to load if authenticated,
