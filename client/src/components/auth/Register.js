@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import classnames from "classnames";
 import { withRouter } from "react-router-dom";
 
 // in order to assign types to properties inserted by redux
