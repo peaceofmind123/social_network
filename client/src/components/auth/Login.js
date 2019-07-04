@@ -22,7 +22,6 @@ class Login extends Component {
     const user = { email, password };
 
     this.props.loginUser(user);
-    this.props.history.push("/dashboard");
   };
 
   componentDidMount() {
@@ -30,7 +29,11 @@ class Login extends Component {
       this.props.history.push("/dashboard");
     }
   }
-
+  componentWillReceiveProps(newProps) {
+    if (newProps.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
+    }
+  }
   render() {
     const { email, password, errors } = this.state;
     return (

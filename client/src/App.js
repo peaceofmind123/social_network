@@ -1,13 +1,17 @@
 import React from "react";
 import "./App.css";
+
 import Navbar from "./components/layouts/Navbar";
 import Landing from "./components/layouts/Landing";
 import Footer from "./components/layouts/Footer";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Dashboard from "./components/dashboard/Dashboard";
+import CreateProfile from "./components/create-profile/CreateProfile";
 
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+// Switch is required to wrap around the private route... just a nuance of react
+import PrivateRoute from "./components/common/PrivateRoute";
 
 import store from "./store";
 import { Provider } from "react-redux";
@@ -35,11 +39,20 @@ function App() {
         <div className="App">
           <Navbar />
           <Route exact path="/" component={Landing} />
-          <div className="container">
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/dashboard" component={Dashboard} />
-          </div>
+
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/register" component={Register} />
+          <Switch>
+            <PrivateRoute exact path="/dashboard" component={Dashboard} />
+          </Switch>
+          <Switch>
+            <PrivateRoute
+              exact
+              path="/create-profile"
+              component={CreateProfile}
+            />
+          </Switch>
+
           <Footer />
         </div>
       </Router>
