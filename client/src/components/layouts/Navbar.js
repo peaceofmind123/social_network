@@ -16,24 +16,36 @@ class Navbar extends Component {
     const { isAuthenticated, user } = this.props.auth;
 
     const navAuthenticated = (
-      <li className="nav-item">
-        <a className="nav-link" onClick={this.onLogout}>
-          <span>
-            <img
-              style={{
-                width: "2rem",
-                marginRight: "10px",
-                display: "inline"
-              }}
-              className="rounded-circle"
-              src={user.avatar}
-              alt="Gravatar"
-              title="Please link a valid gravatar email to see the avatar"
-            />
-          </span>
-          Logout
-        </a>
-      </li>
+      <ul className="navbar-nav ml-auto">
+        <li className="nav-item">
+          <Link className="nav-link" to="/feed">
+            Post Feed
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link className="nav-link" to="/dashboard">
+            Dashboard
+          </Link>
+        </li>
+        <li className="nav-item">
+          <a href="" className="nav-link" onClick={this.onLogout}>
+            <span>
+              <img
+                style={{
+                  width: "2rem",
+                  marginRight: "10px",
+                  display: "inline"
+                }}
+                className="rounded-circle"
+                src={user.avatar}
+                alt="Gravatar"
+                title="Please link a valid gravatar email to see the avatar"
+              />
+            </span>
+            Logout
+          </a>
+        </li>
+      </ul>
     );
 
     const navGuest = (
