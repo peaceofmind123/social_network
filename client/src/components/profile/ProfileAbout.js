@@ -8,7 +8,10 @@ class ProfileAbout extends Component {
 
     // Get first name
 
-    const firstName = profile.user && profile.user.name.trim().split(" ")[0];
+    const firstName =
+      profile.user &&
+      profile.user.name &&
+      profile.user.name.trim().split(" ")[0];
 
     // Skill List
     const skills =
