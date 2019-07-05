@@ -5,7 +5,7 @@ const passport = require("passport");
 const userRouter = require("./routes/api/users");
 const profileRouter = require("./routes/api/profile");
 const postRouter = require("./routes/api/posts");
-
+const path = require("path");
 // cors: dev only
 const cors = require("cors");
 
@@ -42,6 +42,16 @@ app.use((req, res, next) => {
 app.use("/api/users", userRouter);
 app.use("/api/posts", postRouter);
 app.use("/api/profile", profileRouter);
+
+// serve static assets in production
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build")); // the build folder will be generated dynamically on heroku
+
+  // anything other than our API routes shall be handled by the built index.html file
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
