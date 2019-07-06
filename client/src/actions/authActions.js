@@ -3,6 +3,10 @@ import axios from "axios";
 import jwtDecode from "jwt-decode";
 import setAuthHeader from "../utils/setAuthHeader";
 
+const productionURLPref = "";
+const devURLPref = "http://localhost:5000";
+const isDev = process.env.NODE_ENV === "development";
+
 // Contains actions that define the data required by the reducer to update state
 // These just return constant objects which at least have a type and tell the reducer what to do
 // The doing part is done by the reducer itself, not here
@@ -10,7 +14,7 @@ import setAuthHeader from "../utils/setAuthHeader";
 // Action to register the user, the UI calls it whenever it wants to register a user
 export const registerUser = (userData, history) => dispatch => {
   axios
-    .post("http://localhost:5000/api/users/register", userData)
+    .post(`${isDev ? devURLPref : ""}/api/users/register`, userData)
     .then(res => history.push("/login")) // redirect to login
     .catch(err => dispatch({ type: GET_ERRORS, payload: err.response.data }));
   // when we get an error, we dispatch the GET_ERRORS action type to the reducer which then modifies the state
@@ -19,7 +23,7 @@ export const registerUser = (userData, history) => dispatch => {
 // Login User
 export const loginUser = userData => dispatch => {
   axios
-    .post("http://localhost:5000/api/users/login", userData)
+    .post(`${isDev ? devURLPref : ""}/api/users/login`, userData)
     .then(res => {
       const { token } = res.data;
       // save the token to localstorage
