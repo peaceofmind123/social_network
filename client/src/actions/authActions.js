@@ -3,7 +3,6 @@ import axios from "axios";
 import jwtDecode from "jwt-decode";
 import setAuthHeader from "../utils/setAuthHeader";
 
-const productionURLPref = "";
 const devURLPref = "http://localhost:5000";
 const isDev = process.env.NODE_ENV === "development";
 

@@ -1,12 +1,16 @@
 import axios from "axios";
 import * as actionTypes from "./types";
+
+const devURLPref = "http://localhost:5000";
+const isDev = process.env.NODE_ENV === "development";
+
 // get the profile of the currently logged in user
 export const getCurrentProfile = () => dispatch => {
   // update the state to reflect that the profile is being loaded
   dispatch(profileLoading());
 
   axios
-    .get("http://localhost:5000/api/profile")
+    .get(`${isDev ? devURLPref : ""}/api/profile`)
     .then(res =>
       dispatch({
         type: actionTypes.GET_PROFILE, // update the state to reflect that the profile is recieved
@@ -36,7 +40,7 @@ export const clearCurrentProfile = () => ({
 
 export const addProfile = (profileData, history) => dispatch => {
   axios
-    .post("http://localhost:5000/api/profile", profileData)
+    .post(`${isDev ? devURLPref : ""}/api/profile`, profileData)
     .then(res => history.push("/dashboard"))
     .catch(err =>
       dispatch({ type: actionTypes.GET_ERRORS, payload: err.response.data })
@@ -47,7 +51,7 @@ export const addProfile = (profileData, history) => dispatch => {
 export const deleteAccount = () => dispatch => {
   if (!window.confirm("This cannot be undone. Are you sure?")) return;
   axios
-    .delete("http://localhost:5000/api/users")
+    .delete(`${isDev ? devURLPref : ""}/api/users`)
     .then(res =>
       dispatch({
         type: actionTypes.SET_CURRENT_USER,
@@ -66,7 +70,7 @@ export const deleteAccount = () => dispatch => {
 export const getProfileByHandle = handle => dispatch => {
   dispatch(profileLoading());
   axios
-    .get(`http://localhost:5000/api/profile/handle/${handle}`)
+    .get(`${isDev ? devURLPref : ""}/api/profile/handle/${handle}`)
     .then(res =>
       dispatch({
         type: actionTypes.GET_PROFILE,
@@ -84,7 +88,7 @@ export const getProfileByHandle = handle => dispatch => {
 // Add experience
 export const addExperience = (expData, history) => dispatch => {
   axios
-    .post("http://localhost:5000/api/profile/experience", expData)
+    .post(`${isDev ? devURLPref : ""}/api/profile/experience`, expData)
     .then(res => history.push("/dashboard"))
     .catch(err =>
       dispatch({
@@ -97,7 +101,7 @@ export const addExperience = (expData, history) => dispatch => {
 // Add education
 export const addEducation = (eduData, history) => dispatch => {
   axios
-    .post("http://localhost:5000/api/profile/education", eduData)
+    .post(`${isDev ? devURLPref : ""}/api/profile/education`, eduData)
     .then(res => history.push("/dashboard"))
     .catch(err =>
       dispatch({
@@ -110,7 +114,7 @@ export const addEducation = (eduData, history) => dispatch => {
 // Delete Experience
 export const deleteExperience = id => dispatch => {
   axios
-    .delete(`http://localhost:5000/api/profile/experience/${id}`)
+    .delete(`${isDev ? devURLPref : ""}/api/profile/experience/${id}`)
     .then(res =>
       dispatch({
         type: actionTypes.GET_PROFILE,
@@ -128,7 +132,7 @@ export const deleteExperience = id => dispatch => {
 // Delete Education
 export const deleteEducation = id => dispatch => {
   axios
-    .delete(`http://localhost:5000/api/profile/education/${id}`)
+    .delete(`${isDev ? devURLPref : ""}/api/profile/education/${id}`)
     .then(res =>
       dispatch({
         type: actionTypes.GET_PROFILE,
@@ -147,7 +151,7 @@ export const deleteEducation = id => dispatch => {
 export const getProfiles = () => dispatch => {
   dispatch(profileLoading());
   axios
-    .get("http://localhost:5000/api/profile/all")
+    .get(`${isDev ? devURLPref : ""}/api/profile/all`)
     .then(res =>
       dispatch({
         type: actionTypes.GET_PROFILES,

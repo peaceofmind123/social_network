@@ -10,11 +10,14 @@ import {
   DELETE_POST
 } from "./types";
 
+const devURLPref = "http://localhost:5000";
+const isDev = process.env.NODE_ENV === "development";
+
 // Add Post
 export const addPost = postData => dispatch => {
   dispatch(clearErrors());
   axios
-    .post("http://localhost:5000/api/posts", postData)
+    .post(`${isDev ? devURLPref : ""}/api/posts`, postData)
     .then(res =>
       dispatch({
         type: ADD_POST,
@@ -33,7 +36,7 @@ export const addPost = postData => dispatch => {
 export const getPosts = () => dispatch => {
   dispatch(setPostLoading());
   axios
-    .get("http://localhost:5000/api/posts")
+    .get(`${isDev ? devURLPref : ""}/api/posts`)
     .then(res =>
       dispatch({
         type: GET_POSTS,
@@ -52,7 +55,7 @@ export const getPosts = () => dispatch => {
 export const getPost = id => dispatch => {
   dispatch(setPostLoading());
   axios
-    .get(`http://localhost:5000/api/posts/${id}`)
+    .get(`${isDev ? devURLPref : ""}/api/posts/${id}`)
     .then(res =>
       dispatch({
         type: GET_POST,
@@ -70,7 +73,7 @@ export const getPost = id => dispatch => {
 // Delete Post
 export const deletePost = id => dispatch => {
   axios
-    .delete(`http://localhost:5000/api/posts/${id}`)
+    .delete(`${isDev ? devURLPref : ""}/api/posts/${id}`)
     .then(res =>
       dispatch({
         type: DELETE_POST,
@@ -88,7 +91,7 @@ export const deletePost = id => dispatch => {
 // Add Like
 export const addLike = id => dispatch => {
   axios
-    .post(`http://localhost:5000/api/posts/like/${id}`)
+    .post(`${isDev ? devURLPref : ""}/api/posts/like/${id}`)
     .then(res => dispatch(getPosts()))
     .catch(err =>
       dispatch({
@@ -101,7 +104,7 @@ export const addLike = id => dispatch => {
 // Remove Like
 export const removeLike = id => dispatch => {
   axios
-    .post(`http://localhost:5000/api/posts/unlike/${id}`)
+    .post(`${isDev ? devURLPref : ""}/api/posts/unlike/${id}`)
     .then(res => dispatch(getPosts()))
     .catch(err =>
       dispatch({
@@ -115,7 +118,7 @@ export const removeLike = id => dispatch => {
 export const addComment = (postId, commentData) => dispatch => {
   dispatch(clearErrors());
   axios
-    .post(`http://localhost:5000/api/posts/comment/${postId}`, commentData)
+    .post(`${isDev ? devURLPref : ""}/api/posts/comment/${postId}`, commentData)
     .then(res =>
       dispatch({
         type: GET_POST,
@@ -133,7 +136,9 @@ export const addComment = (postId, commentData) => dispatch => {
 // Delete Comment
 export const deleteComment = (postId, commentId) => dispatch => {
   axios
-    .delete(`http://localhost:5000/api/posts/comment/${postId}/${commentId}`)
+    .delete(
+      `${isDev ? devURLPref : ""}/api/posts/comment/${postId}/${commentId}`
+    )
     .then(res =>
       dispatch({
         type: GET_POST,
