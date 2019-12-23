@@ -66,7 +66,7 @@ class Navbar extends Component {
       <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-3">
         <div className="container-fluid">
           <Link className="navbar-brand" to="/">
-            DevConnector
+            DevSocialPlatform
           </Link>
           <button
             className="navbar-toggler"
